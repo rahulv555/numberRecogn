@@ -7,10 +7,13 @@ import tensorflow as tf
 import cv2
 import numpy as np
 
+#Preparing Dataset
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train = tf.keras.utils.normalize(x_train,axis=1)
 x_test = tf.keras.utils.normalize(x_test,axis=1)
+
+#Generating Model
 
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Flatten(input_shape=(28,28)))
@@ -18,6 +21,7 @@ model.add(tf.keras.layers.Dense(units=128,activation=tf.nn.relu))
 model.add(tf.keras.layers.Dense(units=64,activation=tf.nn.relu))
 model.add(tf.keras.layers.Dense(units=10,activation=tf.nn.softmax))
 
+#Compiling Model
 
 model.compile(
     loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
@@ -25,7 +29,13 @@ model.compile(
     metrics=["accuracy"],
 )
 model.fit(x_train, y_train,epochs=7, verbose=1)
+
+#Saving Model
+
 model.save('digits.model')
+
+#Checking the Model for given examples
+
 for x in range(1,7):
     z=str(x)+".png"
     img = cv2.imread(z)[:,:,0]
